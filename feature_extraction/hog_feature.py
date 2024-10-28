@@ -10,8 +10,28 @@ def main():
     for category in CATEGORIES:
         dataset_path = "../dataset"
         # compute_good_dataset_hog_feature(dataset_path=good_dataset_path, category=category)
-        compute_bad_dataset_hog_feature(dataset_path, category)
+        # compute_bad_dataset_hog_feature(dataset_path, category)
+        compute_good_dataset_for_testing(dataset_path, category)
     return None
+
+
+def compute_good_dataset_for_testing(dataset_path, category):
+    assert dataset_path is not None, "dataset_path cannot be empty"
+    assert category in CATEGORIES, "invalid data category"
+
+    file_list = list(Path(dataset_path).glob(f'{category}/test/good/*.png'))
+    hog = get_hog_descriptor()
+    num_sample, feature_size = len(file_list), hog.getDescriptorSize()
+    X = np.zeros((num_sample, feature_size))
+
+    for index, file in enumerate(file_list):
+        img = cv.imread(file)
+        img = cv.resize(img, (128,128))
+        hist = hog.compute(img)
+        X[index, :] = hist
+
+    save_path = '../../output/hog_descriptor_good_(test_set).xlsx'
+    save_feature_to_excel(save_path, X, category)
 
 def compute_bad_dataset_hog_feature(dataset_path, category):
     assert dataset_path is not None, "dataset_path cannot be empty"
@@ -48,7 +68,7 @@ def compute_good_dataset_hog_feature(dataset_path, category):
     print(f"Computing HOG descriptor for {category} category...")
     for index, file_path in enumerate(img_files):
         img = cv.imread(file_path)
-        # Bottle image size is 900x900 and we have to resize it to 128x128
+        # All images have to be resized to 128x128
         img = cv.resize(img, (128, 128))
         hist = hog.compute(img)
         X[index, :] = hist

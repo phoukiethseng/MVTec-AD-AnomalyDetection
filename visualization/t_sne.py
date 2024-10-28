@@ -1,31 +1,33 @@
+import math
+
 from sklearn.manifold import TSNE
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-from unicodedata import category
 
+from utils.constants import CATEGORIES
 from utils.feature import get_feature_from_excel
 
 def main():
 
-    category = 'toothbrush'
+    for category in CATEGORIES:
+        X_good = get_hog_features(category, 'good')
+        X_bad = get_hog_features(category, 'bad')
 
-    X_good = get_hog_features(category, 'good')
-    X_bad = get_hog_features(category, 'bad')
+        num_good, num_bad = X_good.shape[0], X_bad.shape[0]
 
-    perplexity = 30
-    max_iteration = 5000
-    t_sne = TSNE(n_components=2, perplexity=perplexity, random_state=42, max_iter=max_iteration)
-    Y_good = t_sne.fit_transform(X_good)
-    Y_bad = t_sne.fit_transform(X_bad)
+        X = np.vstack((X_good, X_bad))
 
-    # Plot
-    plt.figure(figsize=(10,10))
-    plt.scatter(Y_good[:, 0], Y_good[:, 1], c='blue', label='good' )
-    plt.scatter(Y_bad[:, 0], Y_bad[:, 1], c='red', label='bad' )
-    plt.title(f"{category} dataset (perplexity={perplexity}, max_iteration={max_iteration})")
-    plt.legend()
-    plt.show()
+        perplexity = math.floor(math.sqrt(min(num_bad, num_good)))
+        t_sne = TSNE(n_components=2, perplexity=perplexity, random_state=78, method='exact')
+        Y = t_sne.fit_transform(X)
+
+        # Plot
+        plt.figure(figsize=(10,10))
+        plt.scatter(Y[:num_good, 0], Y[:num_good, 1], c='blue', label='good')
+        plt.scatter(Y[num_good:, 0], Y[num_good:, 1], c='red', label='bad' )
+        plt.title(f"{category} dataset (perplexity={perplexity})")
+        plt.legend()
+        plt.show()
 
     return None
 
