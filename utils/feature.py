@@ -30,7 +30,6 @@ def get_feature_from_excel(file_path, feature_size, category="bottle"):
     """
     Get features from saved Excel file
 
-    :param data_class: class of data ("good" or "bad"). Default is "good".
     :param category: Specify which category to get features from (eg: "bottle", "cable" ...etc.). Default: "bottle"
     :param feature_size: number of feature or dimension of feature descriptor
     :param file_path: path to saved feature descriptor
