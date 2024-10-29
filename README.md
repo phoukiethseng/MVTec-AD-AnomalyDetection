@@ -17,6 +17,8 @@ After extracted features using HOG or SIFT, save the feature vector into:
 2. `feature_extraction/output/sift_descriptors_good.xlsx`: Extracted SIFT Descriptor of train data
 3. `feature_extraction/output/hog_descriptors_bad.xlsx`: Extracted HOG Descriptor of test data
 4. `feature_extraction/output/sift_descriptors_bad.xlsx`: Extracted SIFT Descriptor of test data
+5. `feature_extraction/output/hog_descriptors_good_(test_set).xlsx`: Extracted HOG Descriptor of normal class data (Used as test set)
+6. `feature_extraction/output/sift_descriptors_good_(test_set).xlsx`: Extracted SIFT Descriptor of normal class (Used as test set)
 
 Using the `save_feature_to_excel` function in `utils/feature`. 
 Since dataset contain several categories (bottle, screw, tile...etc), you have to specify which category to save into which 
